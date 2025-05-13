@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\RegisterController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
@@ -25,3 +26,7 @@ Route::post('logout',function (){
 
     return redirect('/ ');
 })->name('logout');
+
+
+Route::view('register','register') -> name('register');
+Route::post('register',RegisterController::class) -> name('register.store');
