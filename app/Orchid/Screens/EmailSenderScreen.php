@@ -2,7 +2,6 @@
 
 namespace App\Orchid\Screens;
 
-
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Mail\Message;
@@ -14,35 +13,38 @@ use Orchid\Support\Facades\Layout;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Screen;
 use Orchid\Support\Facades\Alert;
-
 class EmailSenderScreen extends Screen
 {
     /**
-     * Fetch data to be displayed on the screen.
+     * Query data.
      *
      * @return array
      */
-    public function query(): iterable
+    public function query(): array
     {
-        return [
-            'subject' => date('F').'Campaign  news',
-        ];
+        return [];
     }
 
     /**
-     * The name of the screen displayed in the header.
-     *
-     * @return string|null
+     * The name is displayed on the user's screen and in the headers
      */
     public function name(): ?string
     {
-        return 'EmailSenderScreen';
+        return "Email sender";
     }
 
     /**
-     * The screen's action buttons.
+     * The description is displayed on the user's screen under the heading
+     */
+    public function description(): ?string
+    {
+        return "Tool that sends ad-hoc email messages.";
+    }
+
+    /**
+     * Button commands.
      *
-     * @return \Orchid\Screen\Action[]
+     * @return Link[]
      */
     public function commandBar(): array
     {
@@ -54,55 +56,60 @@ class EmailSenderScreen extends Screen
     }
 
     /**
-     * The screen's layout elements.
+     * Views.
      *
-     * @return \Orchid\Screen\Layout[]|string[]
+     * @return Layout[]
      */
-    public function layout(): iterable
+    public function layout(): array
     {
         return [
             Layout::rows([
-                Input::make('Subject')
-                    ->required()
+                Input::make('subject')
                     ->title('Subject')
-                    ->placeholder('Message need')
-                    ->help('Message need'),
+                    ->required()
+                    ->placeholder('Message subject line')
+                    ->help('Enter the subject line for your message'),
 
                 Relation::make('users.')
                     ->title('Recipients')
                     ->multiple()
                     ->required()
-                    ->placeholder('Email address')
-                    ->help('Enter the users that you would like to send this message to')
-                    ->fromModel(User::class, 'name'),
+                    ->placeholder('Email addresses')
+                    ->help('Enter the users that you would like to send this message to.')
+                    ->fromModel(User::class,'name','email'),
 
                 Quill::make('content')
                     ->title('Content')
                     ->required()
                     ->placeholder('Insert text here ...')
                     ->help('Add the content for the message that you would like to send.')
+
             ])
         ];
     }
-    public function description(): ?string
-    {
-        return "Hello world";
-    }
+
+    /**
+     * @param Request $request
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function sendMessage(Request $request)
     {
         $request->validate([
             'subject' => 'required|min:6|max:50',
-            'users' => 'required',
-            'content' => 'required|min:10',
+            'users'   => 'required',
+            'content' => 'required|min:10'
         ]);
 
         Mail::raw($request->get('content'), function (Message $message) use ($request) {
             $message->from('sample@email.com');
             $message->subject($request->get('subject'));
+
             foreach ($request->get('users') as $email) {
                 $message->to($email);
             }
         });
+
         Alert::info('Your email message has been sent successfully.');
     }
 }
