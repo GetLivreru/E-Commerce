@@ -5,6 +5,12 @@ use App\Http\Controllers\RegisterController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
+use App\Http\Controllers\ProductImportController;
+
+
+
+Route::get('/import-products', [ProductImportController::class, 'import']);
+
 
 Route::get('/', function () {
     return view('layouts.layout');
