@@ -10,7 +10,6 @@
 </style>
 <body>
     <main>
-        {{$slot}}
     </main>
 </body>
 </html>
