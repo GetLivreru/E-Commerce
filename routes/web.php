@@ -7,26 +7,23 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('layouts.layout');
 });
 
 Route::get('login', function (){
-    return view('login');
-})->name('login');
+    return view('auth.login');
+})->name('login')->middleware('guest');
 
-Route::post('login',LoginController::class)->name('login.attempt');
+Route::post('login', LoginController::class)->name('login.attempt')->middleware('guest');
 
-Route::view('dashboard', 'dashboard')->name('dashboard');
+Route::view('dashboard', 'dashboard')->name('dashboard')->middleware('auth');
 
-Route::post('logout',function (){
-  Auth::guard('web')->logout();
+Route::post('logout', function (){
+    Auth::guard('web')->logout();
+    Session::invalidate();
+    Session::regenerateToken();
+    return redirect('/');
+})->name('logout')->middleware('auth');
 
-  Session::invalidate();
-  Session::regenerateToken();
-
-    return redirect('/ ');
-})->name('logout');
-
-
-Route::view('register','register') -> name('register');
-Route::post('register',RegisterController::class) -> name('register.store');
+Route::view('register', 'auth.register')->name('register')->middleware('guest');
+Route::post('register', RegisterController::class)->name('register.store')->middleware('guest');
