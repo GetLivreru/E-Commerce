@@ -8,8 +8,10 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
 use App\Http\Controllers\ProductImportController;
 
-Route::get('/import-products', [ProductImportController::class, 'import']);
-Route::get('/products', [ProductController::class, 'index']);
+Route::middleware(['auth', 'admin'])->group(function () {
+    Route::get('/import-products', [ProductImportController::class, 'import']);
+    Route::get('/products', [ProductController::class, 'index']);
+});
 
 Route::get('/', function () {
     return view('layouts.layout');
