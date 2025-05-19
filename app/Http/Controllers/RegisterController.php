@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
+use App\Models\ApiUser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -19,7 +19,7 @@ class RegisterController extends Controller
 
         $userData['password'] = bcrypt($userData['password']);
 
-        $user = User::create($userData);
+        $user =  ApiUser::create($userData);
 
         Auth::login($user);
 

@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Models\User;
+use App\Models\ApiUser;
 
 class LoginController extends Controller
 {
@@ -15,7 +15,7 @@ class LoginController extends Controller
            'password' => ['required'],
         ]);
 
-        $user = User::where('email', $credentials['email'])->first();
+        $user = ApiUser::where('email', $credentials['email'])->first();
 
         if (!$user || !\Hash::check($credentials['password'], $user->password)) {
             return response()->json([

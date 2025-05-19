@@ -8,14 +8,14 @@ use App\Repositories\ProductRepository;
 
 class ProductServices
 {
-    protected $repository;
+    private $repository;
 
     public function __construct(ProductRepository $repository)
     {
         $this->repository = $repository;
     }
 
-    public function createOrUpdate(ProductDTO $dto)
+    public function createOrUpdate(ProductDTO $dto): Product
     {
         $product = $this->repository->findByCode($dto->code);
         if ($product) {

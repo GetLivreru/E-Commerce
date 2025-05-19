@@ -42,5 +42,4 @@ class Kernel extends HttpKernel
         ],
     ];
 
-    // ... остальной код ...
 }

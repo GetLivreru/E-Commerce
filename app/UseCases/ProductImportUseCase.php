@@ -14,7 +14,7 @@ class ProductImportUseCase
         $this->service = $service;
     }
 
-    public function execute(array $productsData)
+    public function execute(array $productsData):void
     {
         foreach ($productsData as $data) {
             $dto = new ProductDTO($data['id'] ?? null, $data['name'], $data['code']);
