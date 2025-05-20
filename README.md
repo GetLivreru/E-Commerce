@@ -148,10 +148,9 @@ E-Commerce/
 ## 🔐 Доступ к админ-панели
 
 Админ-панель доступна по адресу: `http://your-app-url/admin`
-
-Учетные данные по умолчанию:
-- Email: admin@example.com
-- Password: password
+```
+php artisan orchid:admin
+```
 
 ## 📱 API Endpoints
 
