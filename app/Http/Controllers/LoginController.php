@@ -10,6 +10,7 @@ class LoginController extends Controller
 {
     public function __invoke(Request $request)
     {
+        
         $credentials = $request->validate([
            'email' => ['required', 'email'],
            'password' => ['required'],
@@ -23,7 +24,6 @@ class LoginController extends Controller
             ], 401);
         }
 
-        // Создаём токен Sanctum
         $token = $user->createToken('api-token')->plainTextToken;
 
         return response()->json([
