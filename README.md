@@ -86,29 +86,23 @@ php artisan serve
   - **Интерфейсы (Interfaces)**: API и пользовательские интерфейсы
 
 ### Структура папок DDD:
-
+## UseCase вызывает Service 
+## Service использует Repository
+## Repository в свою очередь работает с Eloquent моделью Product
 ```
 app/
-├── Domain/
-│   ├── Catalog/
-│   │   ├── Models/
-│   │   ├── Services/
-│   │   ├── Events/
-│   │   └── Exceptions/
-│   ├── Cart/
-│   ├── Order/
-│   └── User/
-├── Application/
-│   ├── Commands/
-│   ├── Queries/
-│   └── Services/
-├── Infrastructure/
-│   ├── Repositories/
-│   ├── ExternalServices/
-│   └── Persistence/
-└── Interfaces/
-    ├── Api/
-    └── Web/
+├── DTO/
+├── ├──/ProductDTO.php     # Поля name code id
+├── Services/
+│   ├──/ProductService.php # Реализация createOrUpdate
+├── Repositories/
+│   ├──/ProductRepository.php # Реализация save в базу данных
+└── UseCase/
+    ├──/ProductImportUseCase.php # Импорт данных 
+```
+## Mapper
+```
+            $dto = new ProductDTO($data['id'] ?? null, $data['name'], $data['code']);
 ```
 
 ### Преимущества DDD в нашем проекте:
