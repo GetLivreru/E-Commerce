@@ -3,7 +3,6 @@
 namespace App\Orchid\Screens\Product;
 
 use App\Models\Product;
-use Illuminate\Http\Request;
 use Orchid\Screen\Screen;
 use Orchid\Screen\Actions\Link;
 use Orchid\Support\Facades\Layout;

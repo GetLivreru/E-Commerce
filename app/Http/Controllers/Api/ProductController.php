@@ -25,17 +25,14 @@ class ProductController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
-            'description' => 'required|string',
-            'price' => 'required|numeric|min:0',
-            'stock' => 'required|integer|min:0',
-            'image_url' => 'nullable|url',
+            'code' => 'required|string|max:50|unique:products',
         ]);
 
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
         }
 
-        $product = Product::create($request->all());
+        $product = Product::create($request->only(['name', 'code']));
         return response()->json($product, 201);
     }
 
@@ -54,17 +51,14 @@ class ProductController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name' => 'sometimes|required|string|max:255',
-            'description' => 'sometimes|required|string',
-            'price' => 'sometimes|required|numeric|min:0',
-            'stock' => 'sometimes|required|integer|min:0',
-            'image_url' => 'nullable|url',
+            'code' => 'sometimes|required|string|max:50|unique:products,code,' . $product->id,
         ]);
 
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
         }
 
-        $product->update($request->all());
+        $product->update($request->only(['name', 'code']));
         return response()->json($product);
     }
 
