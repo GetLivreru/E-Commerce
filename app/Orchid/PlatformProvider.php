@@ -108,6 +108,10 @@ class PlatformProvider extends OrchidServiceProvider
     public function registerMainMenu(): array
     {
         return [
+            Menu::make('Продукты')
+                ->icon('bs.box-seam')
+                ->route('platform.product.list')
+                ->title('Товары'),
             Menu::make('Email sender')
                 ->icon('envelope-letter')
                 ->route('platform.email')

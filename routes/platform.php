@@ -18,6 +18,8 @@ use App\Orchid\Screens\Role\RoleListScreen;
 use App\Orchid\Screens\User\UserEditScreen;
 use App\Orchid\Screens\User\UserListScreen;
 use App\Orchid\Screens\User\UserProfileScreen;
+use App\Orchid\Screens\Product\ProductListScreen;
+use App\Orchid\Screens\Product\ProductEditScreen;
 use Illuminate\Support\Facades\Route;
 use Tabuna\Breadcrumbs\Trail;
 /*
@@ -108,5 +110,18 @@ Route::screen('/examples/layouts', ExampleLayoutsScreen::class)->name('platform.
 Route::screen('/examples/grid', ExampleGridScreen::class)->name('platform.example.grid');
 Route::screen('/examples/charts', ExampleChartsScreen::class)->name('platform.example.charts');
 Route::screen('/examples/cards', ExampleCardsScreen::class)->name('platform.example.cards');
+
+// Products
+Route::screen('products', ProductListScreen::class)
+    ->name('platform.product.list')
+    ->breadcrumbs(fn (Trail $trail) => $trail
+        ->parent('platform.index')
+        ->push('Products', route('platform.product.list')));
+
+Route::screen('product/{product?}', ProductEditScreen::class)
+    ->name('platform.product.edit')
+    ->breadcrumbs(fn (Trail $trail, $product) => $trail
+        ->parent('platform.product.list')
+        ->push($product ? 'Edit Product' : 'Create Product', route('platform.product.edit', $product)));
 
 // Route::screen('idea', Idea::class, 'platform.screens.idea');
