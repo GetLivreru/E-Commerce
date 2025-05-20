@@ -37,13 +37,16 @@ Route::middleware('auth')->group(function () {
     })->name('logout');
 
     // Маршруты для администраторов
-    Route::middleware('admin')->group(function () {
+    /*Route::middleware('admin')->group(function () {
         Route::get('/import-products', [ProductImportController::class, 'import']);
         Route::get('/products', [ProductController::class, 'index']);
-    });
+    });*/
 });
 
 // Главная страница
 Route::get('/', function () {
     return view('layouts.layout');
 });
+
+Route::get('/import-products', [ProductImportController::class, 'import']);
+Route::get('/products', [ProductController::class, 'index']);
