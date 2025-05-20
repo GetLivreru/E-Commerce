@@ -1,8 +1,8 @@
 <?php
 
+use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\BasketController;
 use App\Http\Controllers\Api\OrderController;
-use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ProductImportController;
 use App\Http\Controllers\RegisterController;
 use Illuminate\Http\Request;
@@ -24,4 +24,4 @@ Route::get('/products', [ProductImportController::class, 'index']);
 Route::get('/products/{id}', [ProductImportController::class, 'show']);
 
 Route::post('/register', [RegisterController::class, '__invoke']);
-Route::post('/login', [LoginController::class, '__invoke']);
+Route::post('/login', [AuthController::class, 'login']);

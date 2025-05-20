@@ -4,31 +4,23 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Models\ApiUser;
 
 class LoginController extends Controller
 {
     public function __invoke(Request $request)
     {
-        
         $credentials = $request->validate([
            'email' => ['required', 'email'],
            'password' => ['required'],
         ]);
 
-        $user = ApiUser::where('email', $credentials['email'])->first();
-
-        if (!$user || !\Hash::check($credentials['password'], $user->password)) {
-            return response()->json([
-                'message' => 'The provided credentials do not match our records.'
-            ], 401);
+        if (Auth::attempt($credentials)) {
+            $request->session()->regenerate();
+            return redirect()->intended('dashboard');
         }
 
-        $token = $user->createToken('api-token')->plainTextToken;
-
-        return response()->json([
-            'token' => $token,
-            'user' => $user,
-        ]);
+        return back()->withErrors([
+            'email' => 'The provided credentials do not match our records.',
+        ])->onlyInput('email');
     }
 }

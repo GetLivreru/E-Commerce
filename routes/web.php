@@ -8,29 +8,42 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
 use App\Http\Controllers\ProductImportController;
 
-Route::middleware(['auth', 'admin'])->group(function () {
-    Route::get('/import-products', [ProductImportController::class, 'import']);
-    Route::get('/products', [ProductController::class, 'index']);
+// Маршруты для гостей
+Route::middleware('guest')->group(function () {
+    Route::get('login', function () {
+        return view('auth.login');
+    })->name('login');
+
+    Route::post('login', LoginController::class)->name('login.attempt');
+    
+    Route::get('register', function () {
+        return view('auth.register');
+    })->name('register');
+    
+    Route::post('register', RegisterController::class)->name('register.store');
 });
 
+// Маршруты для авторизованных пользователей
+Route::middleware('auth')->group(function () {
+    Route::get('dashboard', function () {
+        return view('dashboard');
+    })->name('dashboard');
+
+    Route::post('logout', function () {
+        Auth::guard('web')->logout();
+        Session::invalidate();
+        Session::regenerateToken();
+        return redirect('/');
+    })->name('logout');
+
+    // Маршруты для администраторов
+    Route::middleware('admin')->group(function () {
+        Route::get('/import-products', [ProductImportController::class, 'import']);
+        Route::get('/products', [ProductController::class, 'index']);
+    });
+});
+
+// Главная страница
 Route::get('/', function () {
     return view('layouts.layout');
 });
-
-Route::get('login', function (){
-    return view('auth.login');
-})->name('login')->middleware('guest');
-
-Route::post('login', LoginController::class)->name('login.attempt')->middleware('guest');
-
-Route::view('dashboard', 'dashboard')->name('dashboard')->middleware('auth');
-
-Route::post('logout', function (){
-    Auth::guard('web')->logout();
-    Session::invalidate();
-    Session::regenerateToken();
-    return redirect('/');
-})->name('logout')->middleware('auth');
-
-Route::view('register', 'auth.register')->name('register')->middleware('guest');
-Route::post('register', RegisterController::class)->name('register.store')->middleware('guest');
